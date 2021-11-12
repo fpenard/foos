@@ -11,6 +11,9 @@ class Plugin:
     # Run camera
     def runCamera(self):
         while True:
-            long_running(["video/run-camera.sh"])
+            if config.webcamPluginEn == True:
+                config.webcamDev.startRecord(filename=config.webcamRecFile, fps=20.0)
+            else:
+                long_running(["video/run-camera.sh"])
                               
             time.sleep(30)

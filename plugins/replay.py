@@ -14,14 +14,24 @@ class Plugin:
 
     def replay(self, replay_type, trigger, extra={}):
         extra['type'] = trigger
+        if config.webcamPluginEn == True:
+                config.webcamDev.stopRecord()
+                os.rename(config.webcamRecFile, config.webcamReplayFile)
+                config.webcamDev.startRecord(filename=config.webcamRecFile, fps=20.0)
 
-        call_and_log(["video/generate-replay.sh", config.replay_path,
-              str(config.ignore_recent_chunks),
-              str(config.long_chunks), str(config.short_chunks)])
-        self.bus.notify('replay_start', extra)
-        if is_pi():
-            call_and_log(["video/replay.sh", os.path.join(config.replay_path, "replay_{}.h264".format(replay_type)), str(config.replay_fps)])
         else:
-            time.sleep(3)
+            call_and_log(["video/generate-replay.sh", config.replay_path,
+                str(config.ignore_recent_chunks),
+                str(config.long_chunks), str(config.short_chunks)])
+        self.bus.notify('replay_start', extra)
+
+        if config.webcamPluginEn == True:
+            config.webcamDev.runReplay(config.webcamReplayFile, 0.5, 3000)
+        else:
+            if is_pi():
+                call_and_log(["video/replay.sh", os.path.join(config.replay_path, "replay_{}.h264".format(replay_type)), str(config.replay_fps)])
+            else:
+                time.sleep(3)
+
             
         self.bus.notify('replay_end')
