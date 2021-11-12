@@ -1,5 +1,6 @@
 """ Override config values from config_base using this file """
 from config_base import *
+from plugins.webcam import *
 
 
 """ Configure the plugin set """
@@ -63,3 +64,10 @@ from config_base import *
 #league_apikey = 'put-your-apikey-here'
 
 slack_webhook = 'https://hooks.slack.com/services/BLAW/BLAW'
+
+# -- Enable webcam to replace rapsberry pi camera
+# webcamPluginEn = True
+# webcamDev = Webcam(devStr = '/dev/video2')
+# webcamRecFile = "webcamRecFile.avi"
+# webcamReplayFile = "webcamReplayFile.avi"
+webcamPluginEn = False
