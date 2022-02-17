@@ -1,0 +1,3 @@
+[submodule "stm32/foos_stm32F429I_disc1/foos_stm32_project/Core/Src/lvgl"]
+	path = stm32/foos_stm32F429I_disc1/foos_stm32_project/Core/Src/lvgl
+	url = https://github.com/lvgl/lvgl.git
