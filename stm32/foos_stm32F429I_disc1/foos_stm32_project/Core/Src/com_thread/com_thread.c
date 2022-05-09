@@ -182,8 +182,7 @@ void COM_SendEvent(COM_ThreadEvent_t event)
  * Function steps:
  * - Send ping command
  *
- * @par Returns
- *    Nothing
+ * @return None
  */
 static void _COM_SendPingCmd(void)
 {
@@ -200,8 +199,7 @@ static void _COM_SendPingCmd(void)
  *
  * @param [in]	btnId		Button identifier
  * @param [in]	btnState	Button state
- * @par Returns
- *    Nothing
+ * @return None
  */
 static void _COM_SendBtnCmd(COM_BtnId_t btnId, COM_BtnStatus_t btnState)
 {
@@ -221,8 +219,7 @@ static void _COM_SendBtnCmd(COM_BtnId_t btnId, COM_BtnStatus_t btnState)
  * @param [in]	goalTeam	Team identifier of the goal
  * @param [in]	usDuration	Goal detection time duration (in us)
  * @param [in]	usElapsed	Goal elapsed time duration (in us)
- * @par Returns
- *    Nothing
+ * @return None
  */
 static void _COM_SendGoalCmd(COM_GoalTeam_t goalTeam, uint32_t usDuration, uint32_t usElapsed)
 {
@@ -252,12 +249,10 @@ static void _COM_SendGoalCmd(COM_GoalTeam_t goalTeam, uint32_t usDuration, uint3
  * - Start ping timer
  * - Infinite loop:
  * 		- Wait for event
- * 		-
- * - Send command and wait 10ms
+ * 		- Detect event and launch callback function
  *
  * @param [in]	argument	Not used
- * @par Returns
- *    Nothing
+ * @return None
  */
 static void _COM_TaskMain(void const *argument)
 {
@@ -269,6 +264,8 @@ static void _COM_TaskMain(void const *argument)
     {
         // Wait for event
         osEvent event = osSignalWait((0xFFFFFFFF >> (32U - COM_THREAD_EVENT_NUM)), osWaitForever);
+
+        // Detect event and launch callback function
         if (event.status == osEventSignal)
         {
             for (uint32_t i = 0; i < COM_THREAD_EVENT_NUM; i++)
@@ -290,8 +287,7 @@ static void _COM_TaskMain(void const *argument)
  * - Send command and wait 10ms
  *
  * @param [in]	evtFlag		Event flag identifier
- * @par Returns
- *    Nothing
+ * @return None
  */
 static void _COM_TaskEvtPing(COM_ThreadEvent_t evtFlag)
 {
@@ -308,8 +304,7 @@ static void _COM_TaskEvtPing(COM_ThreadEvent_t evtFlag)
  * - Wait button command interval time
  *
  * @param [in]	evtFlag		Event flag identifier
- * @par Returns
- *    Nothing
+ * @return None
  */
 static void _COM_TaskEvtBtn(COM_ThreadEvent_t evtFlag)
 {
@@ -362,8 +357,7 @@ static void _COM_TaskEvtBtn(COM_ThreadEvent_t evtFlag)
  * - Lock goal detection and update goal statistics
  *
  * @param [in]	evtFlag		Event flag identifier
- * @par Returns
- *    Nothing
+ * @return None
  */
 static void _COM_TaskEvtGoalStart(COM_ThreadEvent_t evtFlag)
 {
@@ -398,8 +392,7 @@ static void _COM_TaskEvtGoalStart(COM_ThreadEvent_t evtFlag)
  * - Unlock goal detection, update goal statistics and send goal detection command
  *
  * @param [in]	evtFlag		Event flag identifier
- * @par Returns
- *    Nothing
+ * @return None
  */
 static void _COM_TaskEvtGoalEnd(COM_ThreadEvent_t evtFlag)
 {
@@ -443,8 +436,7 @@ static void _COM_TaskEvtGoalEnd(COM_ThreadEvent_t evtFlag)
  * - Send COM_THREAD_EVENT_PING event to COM_Thread
  *
  * @param [in]  arg		Not used
- * @par Returns
- *    Nothing
+ * @return None
  */
 static void _COM_TaskPingTimerCallback(void const *arg)
 {
