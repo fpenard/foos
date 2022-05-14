@@ -61,7 +61,6 @@ void events_init(lv_ui *ui)
 static void event_cb(lv_event_t *e)
 {
     // Get event identifier from callback argument
-    lv_event_code_t code = lv_event_get_code(e);
     uint32_t user_data = lv_event_get_user_data(e);
 
     // Send event to COM_Thread
