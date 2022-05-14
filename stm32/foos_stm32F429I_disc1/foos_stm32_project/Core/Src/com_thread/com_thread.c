@@ -229,10 +229,10 @@ static void _COM_SendGoalCmd(COM_GoalTeam_t goalTeam, uint32_t usDuration, uint3
     switch (goalTeam)
     {
     case COM_GOAL_TEAM_BLACK:
-        sprintf(cmdStr, COM_GOAL_BLACK_CMD_STR, usDuration, usElapsed);
+        sprintf(cmdStr, COM_GOAL_BLACK_CMD_STR, (unsigned long)usDuration, (unsigned long)usElapsed);
         break;
     case COM_GOAL_TEAM_YELLOW:
-        sprintf(cmdStr, COM_GOAL_YELLOW_CMD_STR, usDuration, usElapsed);
+        sprintf(cmdStr, COM_GOAL_YELLOW_CMD_STR, (unsigned long)usDuration, (unsigned long)usElapsed);
         break;
     default:
         return;
@@ -397,9 +397,6 @@ static void _COM_TaskEvtGoalStart(COM_ThreadEvent_t evtFlag)
 static void _COM_TaskEvtGoalEnd(COM_ThreadEvent_t evtFlag)
 {
     COM_GoalTeam_t teamId = COM_GOAL_TEAM_BLACK;
-    uint32_t now = 0;
-    uint32_t usDuration = 0;
-    uint32_t usElapsed = 0;
 
     // Determine goal team identifier
     switch (evtFlag)
@@ -417,11 +414,11 @@ static void _COM_TaskEvtGoalEnd(COM_ThreadEvent_t evtFlag)
     // Unlock goal detection, update goal statistics and send goal detection command
     if ((teamId == COM_TaskCntxt.goalTeamId) && (osMutexWait(COM_TaskCntxt.goalMutex, 0) != osOK))
     {
-        now = osKernelSysTick();
-        usDuration = (now - COM_TaskCntxt.goalStat[teamId].goalTickTime) * configTICK_RATE_HZ;
-        usElapsed = (COM_TaskCntxt.goalStat[COM_TaskCntxt.goalTeamId].goalTickTime -
-                     COM_TaskCntxt.goalStat[COM_TaskCntxt.goalTeamId].offTickTime) *
-                    configTICK_RATE_HZ;
+        uint32_t now = osKernelSysTick();
+        uint32_t usDuration = (now - COM_TaskCntxt.goalStat[teamId].goalTickTime) * configTICK_RATE_HZ;
+        uint32_t usElapsed = (COM_TaskCntxt.goalStat[COM_TaskCntxt.goalTeamId].goalTickTime -
+                              COM_TaskCntxt.goalStat[COM_TaskCntxt.goalTeamId].offTickTime) *
+                             configTICK_RATE_HZ;
         _COM_SendGoalCmd(teamId, usDuration, usElapsed);
 
         COM_TaskCntxt.goalStat[COM_TaskCntxt.goalTeamId].offTickTime = now;
